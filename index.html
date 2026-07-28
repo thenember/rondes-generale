@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#14100D">
+<title>Guide de ronde - reperage des pointeaux</title>
+
+<!--
+================================================================================
+  GUIDE DE RONDE  -  version 2
+================================================================================
+
+  Fonctionne sans internet. Ne communique avec aucun serveur.
+  Ne remplace pas le pointage : l'agent valide toujours avec son PTI.
+
+  ------------------------------------------------------------------
+  RANGEMENT
+  ------------------------------------------------------------------
+      Ronde/
+        guide-ronde.html
+        photos/            <- toutes les photos annotees
+
+  ------------------------------------------------------------------
+  NOMMAGE DES PHOTOS
+  ------------------------------------------------------------------
+  Numero du pointeau, puis ordre d'apparition :
+
+      P01-1.jpg  P01-2.jpg
+      P07-1.jpg  P07-2.jpg  P07-3.jpg  P07-4.jpg
+      ...
+
+  Chaque pointeau a 4 emplacements photo prevus. TU N'AS RIEN A MODIFIER :
+  les emplacements sans photo disparaissent tout seuls et les etapes se
+  renumerotent. Mets 1 photo, 2, 3 ou 4 selon le pointeau, c'est tout.
+
+  Il t'en faut une 5e sur un pointeau ? Ajoute une ligne
+  { img: "photos/P07-5.jpg", texte: "" } dans son bloc "etapes".
+
+  ------------------------------------------------------------------
+  REMPLISSAGE
+  ------------------------------------------------------------------
+  Les 36 blocs sont deja crees. Pour chacun :
+
+    nom     : le lieu, tel que l'agent le dit  ("Local TGBT", "Palier -1")
+    statut  : laisser vide si tout est normal.
+              "absent"    -> affiche "Pointeau absent"
+              "difficile" -> affiche "Pointeau peu visible"
+    position: "interne" ou "externe" - ou se trouve le pointeau par rapport
+              au local. Laisser vide si la question ne se pose pas.
+    acces   : cle, badge, absence de reseau...  (laisser vide si rien)
+    texte   : ce que l'agent doit faire A CETTE ETAPE.
+              Court, a l'imperatif. "Prendre l'escalier de service jusqu'au -1."
+
+  Une etape sans photo affiche quand meme son texte : pratique pour une
+  consigne pure ("Refermer la porte derriere soi").
+
+  ------------------------------------------------------------------
+  UTILISATION
+  ------------------------------------------------------------------
+  Telephone : balayer vers la gauche pour le pointeau suivant.
+              Le bouton en haut a gauche ouvre la liste des 36.
+  PDF       : Fichier > Imprimer > Enregistrer en PDF.
+
+================================================================================
+-->
+
+<script>
+const RONDES = [
+  {
+    id: "circuit-a",
+    nom: "Circuit A",
+    sousTitre: "Parcours complet - 2 passages/nuit en semaine, 3 le dimanche soir, 5 le dimanche en journee",
+    depart: "PC securite",
+    pointeaux: [
+      {
+        code: "P01",
+        nom: "Départ de ronde",
+        statut: "",
+        position: "",
+        acces: "",
+        etapes: [
+          { img: "photos/P01-1.jpg", texte: "" },
+          { img: "photos/P01-2.jpg", texte: "" },
+          { img: "photos/P01-3.jpg", texte: "" },
+          { img: "photos/P01-4.jpg", texte: "" }
+        ]
+      },
+      {
+        code: "P02",
+        nom: "Issue de secours — cage d'escalier R+2",
+        statut: "",
+        position: "",
+        acces: "",
+        etapes: [
+          { img: "photos/P02-1.jpg", texte: "" },
+          { img: "photos/P02-2.jpg", texte: "" },
+          { img: "photos/P02-3.jpg", texte: "" },
+          { img: "photos/P02-4.jpg", texte: "" }
+        ]
+      },
+      {
+        code: "P03",
+        nom: "Issue de secours — cage d'escalier R+1",
+        statut: "",
+        position: "",
+        acces: "",
+        etapes: [
+          { img: "photos/P03-1.jpg", texte: "" },
+          { img: "photos/P03-2.jpg", texte: "" },
+          { img: "photos/P03-3.jpg", texte: "" },
+          { img: "photos/P03-4.jpg", texte: "" }
+        ]
+      },
+      {
+        code: "P04",
+        nom: "WC Femmes — 1er étage",
+        statut: "",
+        position: "",
+        acces: "",
+        etapes: [
+          { img: "photos/P04-1.jpg", texte: "" },
+          { img: "photos/P04-2.jpg", texte: "" },
+          { img: "photos/P04-3.jpg", texte: "" },
+          { img: "photos/P04-4.jpg", texte: "" }
+        ]
+      },
+      {
+        code: "P05",
+        nom: "WC Hommes — 1er étage",
+        statut: "",
+        position: "",
+        acces: "",
+        etapes: [
+          { img: "photos/P05-1.jpg", texte: "" },
+          { img: "photos/P05-2.jpg", texte: "" },
+          { img: "photos/P05-3.jpg", texte: "" },
+          { img: "photos/P05-4.jpg", texte: "" }
+        ]
+      },
+      {
+        code: "P06",
+        nom: "Accès usine — 1er étage",
+        statut: "",
+        position: "",
+        acces: "",
+        etapes: [
+          { img: "photos/P06-1.jpg", texte: "Direction la salle de tri." },
+          { img: "photos/P06-2.jpg", texte: "" },
+          { img: "photos/P06-3.jpg", texte: "" },
+          { img: "photos/P06-4.jpg", texte: "" }
+        ]
+      },
+      {
+        code: "P07",
+        nom: "Salle de tri",
+        statut: "",
+        position: "",
+        acces: "",
+        etapes: [
+          { img: "photos/P07-1.jpg", texte: "Accès par la porte n° 7A11, en face." },
+          { img: "photos/P07-2.jpg", texte: "" },
+          { img: "photos/P07-3.jpg", texte: "" },
+          { img: "photos/P07-4.jpg", texte: "" }
+        ]
+      },
+      {
+        code: "P08",
+        nom: "+4,5 m — caisson acoustique",
+        statut: "",
+        position: "",
+        acces: "",
+        etapes: [
+          { img: "photos/P08-1.jpg", texte: "Face au 411T21." },
+          { img: "photos/P08-2.jpg", texte: "" },
+          { img: "photos/P08-3.jpg", texte: "" },
+          { img: "photos/P08-4.jpg", texte: "" }
+        ]
+      },
+      {
+        code: "P09",
+        nom: "+9,5 m — caisson acoustique",
+        statut: "",
+        position: "",
+        acces: "",
+        etapes: [
+          { img: "photos/P09-1.jpg", texte: "Au niveau de la sortie de secours." },
+          { img: "photos/P09-2.jpg", texte: "" },
+          { img: "photos/P09-3.jpg", texte: "" },
+          { img: "photos/P09-4.jpg", texte: "" }
+        ]
+      },
+      {
+        code: "P10",
+        nom: "+9,5 m — à côté du 411T17",
+        statut: "",
+        position: "",
+        acces: "",
+        etapes: [
+          { img: "photos/P10-1.jpg", texte: "" },
+          { img: "photos/P10-2.jpg", texte: "" },
+          { img: "photos/P10-3.jpg", texte: "" },
+          { img: "photos/P10-4.jpg", texte: "" }
+        ]
+      },
+      {
+        code: "P11",
+        nom: "+9,5 m — tableau électrique",
+        statut: "",
+        position: "",
+        acces: "",
+        etapes: [
+          { img: "photos/P11-1.jpg", texte: "Face au 411T11." },
+          { img: "photos/P11-2.jpg", texte: "" },
+          { img: "photos/P11-3.jpg", texte: "" },
+          { img: "photos/P11-4.jpg", texte: "" }
+        ]
+      },
+      {
+        code: "P12",
+        nom: "+12 m — caisson acoustique 411T09",
+        statut: "",
+        position: "",
+        acces: "",
+        etapes: [
+          { img: "photos/P12-1.jpg", texte: "" },
+          { img: "photos/P12-2.jpg", texte: "" },
+          { img: "photos/P12-3.jpg", texte: "" },
+          { img: "photos/P12-4.jpg", texte: "" }
+        ]
+      },
+      {
+        code: "P13",
+        nom: "+12 m — 412S02",
+        statut: "",
+        position: "",
+        acces: "",
+        etapes: [
+          { img: "photos/P13-1.jpg", texte: "À côté du monte-charge." },
+          { img: "photos/P13-2.jpg", texte: "" },
+          { img: "photos/P13-3.jpg", texte: "" },
+          { img: "photos/P13-4.jpg", texte: "" }
+        ]
+      },
+      {
+        code: "P14",
+        nom: "Salle de tri (petite)",
+        statut: "",
+        position: "interne",
+        acces: "",
+        etapes: [
+          { img: "photos/P14-1.jpg", texte: "" },
+          { img: "photos/P14-2.jpg", texte: "" },
+          { img: "photos/P14-3.jpg", texte: "" },
+          { img: "photos/P14-4.jpg", texte: "" }
+        ]
+      },
+      {
+        code: "P15",
+        nom: "Accès trommel",
+        statut: "",
+        position: "externe",
+        acces: "",
+        etapes: [
+          { img: "photos/P15-1.jpg", texte: "Repère : extincteur 158." },
+          { img: "photos/P15-2.jpg", texte: "" },
+          { img: "photos/P15-3.jpg", texte: "" },
+          { img: "photos/P15-4.jpg", texte: "" }
+        ]
+      },
+      {
+        code: "P16",
+        nom: "Crible balistique",
+        statut: "",
+        position: "",
+        acces: "",
+        etapes: [
+          { img: "photos/P16-1.jpg", texte: "En haut de l'alvéole 3." },
+          { img: "photos/P16-2.jpg", texte: "" },
+          { img: "photos/P16-3.jpg", texte: "" },
+          { img: "photos/P16-4.jpg", texte: "" }
+        ]
+      },
+      {
+        code: "P17",
+        nom: "Terrasse ascenseur PMR — côté périphérique",
+        statut: "",
+        position: "",
+        acces: "",
+        etapes: [
+          { img: "photos/P17-1.jpg", texte: "Emprunter la circulation externe." },
+          { img: "photos/P17-2.jpg", texte: "" },
+          { img: "photos/P17-3.jpg", texte: "" },
+          { img: "photos/P17-4.jpg", texte: "" }
+        ]
+      },
+      {
+        code: "P18",
+        nom: "Salle de caractérisation — niveau +2 (6,5 m)",
+        statut: "",
+        position: "",
+        acces: "",
+        etapes: [
+          { img: "photos/P18-1.jpg", texte: "" },
+          { img: "photos/P18-2.jpg", texte: "" },
+          { img: "photos/P18-3.jpg", texte: "" },
+          { img: "photos/P18-4.jpg", texte: "" }
+        ]
+      },
+      {
+        code: "P19",
+        nom: "RIA 210 — trémie d'alimentation",
+        statut: "",
+        position: "",
+        acces: "",
+        etapes: [
+          { img: "photos/P19-1.jpg", texte: "Quai de déchargement." },
+          { img: "photos/P19-2.jpg", texte: "" },
+          { img: "photos/P19-3.jpg", texte: "" },
+          { img: "photos/P19-4.jpg", texte: "" }
+        ]
+      },
+      {
+        code: "P20",
+        nom: "Entrée camion — quai de déchargement",
+        statut: "",
+        position: "",
+        acces: "",
+        etapes: [
+          { img: "photos/P20-1.jpg", texte: "" },
+          { img: "photos/P20-2.jpg", texte: "" },
+          { img: "photos/P20-3.jpg", texte: "" },
+          { img: "photos/P20-4.jpg", texte: "" }
+        ]
+      },
+      {
+        code: "P21",
+        nom: "Sortie camion — quai de déchargement",
+        statut: "",
+        position: "",
+        acces: "",
+        etapes: [
+          { img: "photos/P21-1.jpg", texte: "" },
+          { img: "photos/P21-2.jpg", texte: "" },
+          { img: "photos/P21-3.jpg", texte: "" },
+          { img: "photos/P21-4.jpg", texte: "" }
+        ]
+      },
+      {
+        code: "P22",
+        nom: "RIA — en face de l'alvéole 1",
+        statut: "",
+        position: "",
+        acces: "",
+        etapes: [
+          { img: "photos/P22-1.jpg", texte: "" },
+          { img: "photos/P22-2.jpg", texte: "" },
+          { img: "photos/P22-3.jpg", texte: "" },
+          { img: "photos/P22-4.jpg", texte: "" }
+        ]
+      },
+      {
+        code: "P23",
+        nom: "Local dépoussiérage — RIA 3",
+        statut: "",
+        position: "",
+        acces: "",
+        etapes: [
+          { img: "photos/P23-1.jpg", texte: "Au rez-de-chaussée." },
+          { img: "photos/P23-2.jpg", texte: "" },
+          { img: "photos/P23-3.jpg", texte: "" },
+          { img: "photos/P23-4.jpg", texte: "" }
+        ]
+      },
+      {
+        code: "P24",
+        nom: "Local électrique côté atelier",
+        statut: "",
+        position: "externe",
+        acces: "",
+        etapes: [
+          { img: "photos/P24-1.jpg", texte: "" },
+          { img: "photos/P24-2.jpg", texte: "" },
+          { img: "photos/P24-3.jpg", texte: "" },
+          { img: "photos/P24-4.jpg", texte: "" }
+        ]
+      },
+      {
+        code: "P25",
+        nom: "Local poubelle",
+        statut: "",
+        position: "interne",
+        acces: "",
+        etapes: [
+          { img: "photos/P25-1.jpg", texte: "" },
+          { img: "photos/P25-2.jpg", texte: "" },
+          { img: "photos/P25-3.jpg", texte: "" },
+          { img: "photos/P25-4.jpg", texte: "" }
+        ]
+      },
+      {
+        code: "P26",
+        nom: "RDC — box 440 D12",
+        statut: "",
+        position: "",
+        acces: "",
+        etapes: [
+          { img: "photos/P26-1.jpg", texte: "Début des box." },
+          { img: "photos/P26-2.jpg", texte: "" },
+          { img: "photos/P26-3.jpg", texte: "" },
+          { img: "photos/P26-4.jpg", texte: "" }
+        ]
+      },
+      {
+        code: "P27",
+        nom: "RDC — RIA 09",
+        statut: "",
+        position: "",
+        acces: "",
+        etapes: [
+          { img: "photos/P27-1.jpg", texte: "Circulation vers le local sprinkler." },
+          { img: "photos/P27-2.jpg", texte: "" },
+          { img: "photos/P27-3.jpg", texte: "" },
+          { img: "photos/P27-4.jpg", texte: "" }
+        ]
+      },
+      {
+        code: "P28",
+        nom: "Stockage des balles — extincteur n° 50",
+        statut: "",
+        position: "",
+        acces: "",
+        etapes: [
+          { img: "photos/P28-1.jpg", texte: "" },
+          { img: "photos/P28-2.jpg", texte: "" },
+          { img: "photos/P28-3.jpg", texte: "" },
+          { img: "photos/P28-4.jpg", texte: "" }
+        ]
+      },
+      {
+        code: "P29",
+        nom: "Stockage des balles — porte de sortie de secours",
+        statut: "absent",
+        position: "",
+        acces: "",
+        etapes: [
+          { img: "photos/P29-1.jpg", texte: "" },
+          { img: "photos/P29-2.jpg", texte: "" },
+          { img: "photos/P29-3.jpg", texte: "" },
+          { img: "photos/P29-4.jpg", texte: "" }
+        ]
+      },
+      {
+        code: "P30",
+        nom: "Haut d'escalier — à côté du compresseur",
+        statut: "",
+        position: "",
+        acces: "",
+        etapes: [
+          { img: "photos/P30-1.jpg", texte: "" },
+          { img: "photos/P30-2.jpg", texte: "" },
+          { img: "photos/P30-3.jpg", texte: "" },
+          { img: "photos/P30-4.jpg", texte: "" }
+        ]
+      },
+      {
+        code: "P31",
+        nom: "+4 m — RIA 104, sortie de secours",
+        statut: "",
+        position: "",
+        acces: "",
+        etapes: [
+          { img: "photos/P31-1.jpg", texte: "Passer par la porte en haut de l'escalier, côté compresseur." },
+          { img: "photos/P31-2.jpg", texte: "" },
+          { img: "photos/P31-3.jpg", texte: "" },
+          { img: "photos/P31-4.jpg", texte: "" }
+        ]
+      },
+      {
+        code: "P32",
+        nom: "Local TGBT process",
+        statut: "",
+        position: "interne",
+        acces: "",
+        etapes: [
+          { img: "photos/P32-1.jpg", texte: "" },
+          { img: "photos/P32-2.jpg", texte: "" },
+          { img: "photos/P32-3.jpg", texte: "" },
+          { img: "photos/P32-4.jpg", texte: "" }
+        ]
+      },
+      {
+        code: "P33",
+        nom: "Local compresseur",
+        statut: "",
+        position: "interne",
+        acces: "",
+        etapes: [
+          { img: "photos/P33-1.jpg", texte: "" },
+          { img: "photos/P33-2.jpg", texte: "" },
+          { img: "photos/P33-3.jpg", texte: "" },
+          { img: "photos/P33-4.jpg", texte: "" }
+        ]
+      },
+      {
+        code: "P34",
+        nom: "RDC — box 401403",
+        statut: "",
+        position: "",
+        acces: "",
+        etapes: [
+          { img: "photos/P34-1.jpg", texte: "Fin des box." },
+          { img: "photos/P34-2.jpg", texte: "" },
+          { img: "photos/P34-3.jpg", texte: "" },
+          { img: "photos/P34-4.jpg", texte: "" }
+        ]
+      },
+      {
+        code: "P35",
+        nom: "Sortie vers accès entrée poids lourd",
+        statut: "",
+        position: "",
+        acces: "",
+        etapes: [
+          { img: "photos/P35-1.jpg", texte: "" },
+          { img: "photos/P35-2.jpg", texte: "" },
+          { img: "photos/P35-3.jpg", texte: "" },
+          { img: "photos/P35-4.jpg", texte: "" }
+        ]
+      },
+      {
+        code: "P36",
+        nom: "Retour de ronde",
+        statut: "",
+        position: "",
+        acces: "",
+        etapes: [
+          { img: "photos/P36-1.jpg", texte: "" },
+          { img: "photos/P36-2.jpg", texte: "" },
+          { img: "photos/P36-3.jpg", texte: "" },
+          { img: "photos/P36-4.jpg", texte: "" }
+        ]
+      }
+    ]
+  }
+];
+</script>
+
+<style>
+  :root{
+    --nuit:#14100D; --surface:#1F1915; --surface-2:#2A231D; --ligne:#3A312A;
+    --ambre:#FFB01F; --rouge:#E3000F; --vert:#00A651;
+    --texte:#EDE6DD; --sourdine:#9A8F84;
+    --mono: ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace;
+    --sans: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html,body{ height:100%; }
+  body{
+    background:var(--nuit); color:var(--texte); font-family:var(--sans);
+    font-size:17px; line-height:1.5; -webkit-font-smoothing:antialiased;
+    overscroll-behavior-y:contain;
+  }
+  :focus-visible{ outline:3px solid var(--ambre); outline-offset:2px; }
+
+  /* ---------- barre ---------- */
+  .barre{
+    position:sticky; top:0; z-index:20; background:var(--nuit);
+    border-bottom:1px solid var(--ligne); padding:env(safe-area-inset-top) 14px 0;
+  }
+  .barre-haut{ display:flex; align-items:center; gap:10px; padding:11px 0 9px; }
+  .ico{
+    background:var(--surface-2); border:1px solid var(--ligne); color:var(--texte);
+    border-radius:7px; padding:8px 11px; font-size:15px; cursor:pointer;
+    font-family:var(--sans); line-height:1;
+  }
+  .titre{ font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.14em; }
+  .selecteur{
+    margin-left:auto; background:var(--surface-2); color:var(--texte);
+    border:1px solid var(--ligne); border-radius:6px;
+    font-family:var(--sans); font-size:14px; padding:7px 9px;
+  }
+  .jauge{ height:3px; background:var(--surface-2); display:flex; gap:1px; }
+  .jauge span{ flex:1; background:var(--ligne); }
+  .jauge span.faite{ background:var(--ambre); }
+  .jauge span.active{ background:var(--rouge); }
+
+  /* ---------- sommaire ---------- */
+  .sommaire{
+    position:fixed; inset:0; z-index:40; background:var(--nuit);
+    overflow-y:auto; padding:14px 14px calc(24px + env(safe-area-inset-bottom));
+    display:none;
+  }
+  .sommaire.ouvert{ display:block; }
+  .sommaire h2{
+    font-size:12px; text-transform:uppercase; letter-spacing:.14em;
+    padding:10px 0 14px; color:var(--sourdine);
+  }
+  .item{
+    display:flex; align-items:center; gap:12px; width:100%; text-align:left;
+    background:none; border:0; border-bottom:1px solid var(--ligne);
+    color:var(--texte); font-family:var(--sans); font-size:16px;
+    padding:13px 4px; cursor:pointer;
+  }
+  .item b{ font-family:var(--mono); font-size:13px; color:var(--ambre); min-width:34px; }
+  .item i{ font-style:normal; color:var(--sourdine); font-size:13px; margin-left:auto; }
+
+  /* ---------- carte ---------- */
+  .scene{ padding:0 0 128px; }
+  .carte{ padding:20px 14px 0; max-width:780px; margin:0 auto; }
+  .rang{ display:flex; align-items:flex-start; gap:14px; margin-bottom:14px; }
+  .index{
+    font-family:var(--mono); font-size:50px; line-height:.82; font-weight:700;
+    color:var(--ambre); font-variant-numeric:tabular-nums;
+  }
+  .index small{
+    display:block; font-size:11px; letter-spacing:.1em; color:var(--sourdine);
+    font-weight:400; margin-top:8px;
+  }
+  .code{ font-family:var(--mono); font-size:13px; letter-spacing:.1em; color:var(--rouge); font-weight:700; }
+  .nom{ font-size:25px; font-weight:700; line-height:1.15; letter-spacing:-.015em; margin-top:2px; }
+
+
+  /* ---------- etapes ---------- */
+  .etape{ display:flex; gap:12px; margin-bottom:18px; }
+  .puce{
+    flex:none; width:26px; height:26px; border-radius:50%;
+    border:1.5px solid var(--ambre); color:var(--ambre);
+    font-family:var(--mono); font-size:12px; font-weight:700;
+    display:flex; align-items:center; justify-content:center; margin-top:2px;
+  }
+  .corps{ flex:1; min-width:0; }
+  .corps p{ margin-bottom:9px; }
+  .cadre{
+    background:var(--surface); border:1px solid var(--ligne);
+    border-radius:9px; overflow:hidden;
+  }
+  .cadre img{ display:block; width:100%; height:auto; }
+  .vide{
+    aspect-ratio:4/3; display:flex; flex-direction:column;
+    align-items:center; justify-content:center; gap:6px; text-align:center;
+    color:var(--sourdine); padding:18px;
+    background:repeating-linear-gradient(45deg,var(--surface) 0 12px,var(--surface-2) 12px 24px);
+  }
+  .vide b{ color:var(--texte); font-size:15px; }
+  .vide span{ font-family:var(--mono); font-size:12px; word-break:break-all; }
+
+  .metas{ display:flex; flex-wrap:wrap; gap:8px; margin:2px 0 6px; }
+  .meta{
+    font-family:var(--mono); font-size:12px; letter-spacing:.04em;
+    border:1px solid var(--ligne); color:var(--sourdine);
+    padding:6px 10px; border-radius:5px;
+  }
+  .meta.fort{ border-color:var(--rouge); color:var(--rouge); }
+
+  /* ---------- pied ---------- */
+  .pied{
+    position:fixed; left:0; right:0; bottom:0; z-index:30;
+    background:linear-gradient(to top,var(--nuit) 72%,rgba(20,16,13,0));
+    padding:20px 14px calc(16px + env(safe-area-inset-bottom));
+    display:flex; gap:10px; max-width:780px; margin:0 auto;
+  }
+  .btn{
+    flex:1; font-family:var(--sans); font-size:16px; font-weight:700;
+    letter-spacing:.03em; padding:17px 12px; border:1px solid var(--ligne);
+    border-radius:10px; background:var(--surface-2); color:var(--texte);
+    cursor:pointer; touch-action:manipulation;
+  }
+  .btn.avance{ flex:2; background:var(--ambre); border-color:var(--ambre); color:#14100D; }
+  .btn:disabled{ opacity:.32; cursor:default; }
+  .btn.fin{ background:var(--vert); border-color:var(--vert); color:#fff; }
+
+  .aide{ max-width:780px; margin:22px auto 0; padding:0 14px; color:var(--sourdine); font-size:13px; }
+
+  @media (prefers-reduced-motion:reduce){ *{ animation:none !important; transition:none !important; } }
+
+  /* ---------- impression ---------- */
+  @media print{
+    :root{ --texte:#000; --sourdine:#555; }
+    body{ background:#fff; color:#000; font-size:10.5pt; }
+    .barre,.pied,.aide,.sommaire{ display:none !important; }
+    .scene{ padding:0; }
+    .carte{
+      padding:0 0 10mm; max-width:none;
+      break-inside:avoid; page-break-inside:avoid;
+      border-bottom:1px solid #bbb; margin-bottom:10mm;
+    }
+    .index{ color:#000; }
+    .cadre{ border-color:#bbb; background:#fff; }
+    .etape{ break-inside:avoid; page-break-inside:avoid; }
+    .puce{ border-color:#000; color:#000; }
+    .corps{ display:grid; grid-template-columns:1fr 1fr; gap:8px; align-items:start; }
+    .corps p{ grid-column:1 / -1; }
+    .vide{ background:#f7f6f4; border:1px dashed #bbb; }
+    .meta{ border-color:#999; color:#555; }
+    .meta.fort{ border-color:var(--rouge); color:var(--rouge); font-weight:700; }
+  }
+</style>
+</head>
+
+<body>
+
+<header class="barre">
+  <div class="barre-haut">
+    <button class="ico" id="btnSommaire" type="button" aria-label="Liste des pointeaux">&#9776;</button>
+    <span class="titre">Guide de ronde</span>
+    <select class="selecteur" id="choixRonde" aria-label="Choisir le circuit"></select>
+  </div>
+  <div class="jauge" id="jauge"></div>
+</header>
+
+<div class="sommaire" id="sommaire" role="dialog" aria-label="Liste des pointeaux">
+  <h2>Tous les pointeaux</h2>
+  <div id="listeSommaire"></div>
+</div>
+
+<main class="scene" id="scene" aria-live="polite"></main>
+
+<nav class="pied">
+  <button class="btn" id="btnPrec" type="button">Precedent</button>
+  <button class="btn avance" id="btnSuiv" type="button">Suivant</button>
+</nav>
+
+<p class="aide" id="aide"></p>
+
+<script>
+(function(){
+  "use strict";
+
+  var scene = document.getElementById("scene");
+  var jauge = document.getElementById("jauge");
+  var choix = document.getElementById("choixRonde");
+  var prec  = document.getElementById("btnPrec");
+  var suiv  = document.getElementById("btnSuiv");
+  var aide  = document.getElementById("aide");
+  var som   = document.getElementById("sommaire");
+  var liste = document.getElementById("listeSommaire");
+  var btnSom= document.getElementById("btnSommaire");
+
+  var iR = 0, iP = 0, impression = false;
+
+  RONDES.forEach(function(r,i){
+    var o=document.createElement("option"); o.value=i; o.textContent=r.nom; choix.appendChild(o);
+  });
+  choix.style.display = RONDES.length>1 ? "" : "none";
+
+  function ronde(){ return RONDES[iR]; }
+  function pts(){ return ronde().pointeaux; }
+
+  function ech(t){
+    return String(t==null?"":t)
+      .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+  }
+
+  function photo(src){
+    if(!src) return "";
+    return '<div class="cadre"><img src="'+ech(src)+'" alt="" onerror="GUIDE.rate(this)"></div>';
+  }
+
+  function reperes(p){
+    var t = [];
+    if(p.statut === "absent"){ t.push('<span class="meta">Pointeau absent</span>'); }
+    if(p.statut === "difficile"){ t.push('<span class="meta">Pointeau peu visible</span>'); }
+    if(p.position === "interne"){
+      t.push('<span class="meta">Interne</span>');
+    } else if(p.position === "externe"){
+      t.push('<span class="meta">Externe</span>');
+    }
+    if(p.acces){ t.push('<span class="meta fort">'+ech(p.acces)+'</span>'); }
+    return t.length ? '<div class="metas">'+t.join("")+'</div>' : "";
+  }
+
+  function carte(p,n,total){
+    var et = (p.etapes||[]).filter(function(e){ return e && (e.img || e.texte); });
+
+    var corps = et.map(function(e,i){
+      return '<div class="etape"'+(e.texte?'':' data-auto="1"')+'>'
+        + '<div class="puce">'+(i+1)+'</div>'
+        + '<div class="corps">'
+        +   (e.texte ? '<p>'+ech(e.texte)+'</p>' : "")
+        +   photo(e.img)
+        + '</div></div>';
+    }).join("");
+
+    if(!et.length){
+      corps = '<div class="cadre"><div class="vide"><b>A completer</b>'
+        + '<span>etapes: [ ... ]</span></div></div>';
+    }
+
+    return '<article class="carte">'
+      + '<div class="rang">'
+      +   '<div class="index">'+String(n).padStart(2,"0")
+      +     '<small>SUR '+String(total).padStart(2,"0")+'</small></div>'
+      +   '<div><div class="code">'+ech(p.code)+'</div>'
+      +   '<h1 class="nom">'+ech(p.nom || "Sans nom")+'</h1></div>'
+      + '</div>'
+      + reperes(p)
+      + corps
+      + '</article>';
+  }
+
+  // Une etape sans texte dont la photo n'existe pas est retiree :
+  // le guide s'adapte tout seul au nombre reel de photos.
+  window.GUIDE = {
+    rate: function(img){
+      var et = img.parentNode ? img.parentNode.parentNode : null;
+      while(et && et.className.indexOf("etape") === -1){ et = et.parentNode; }
+      if(!et){
+        if(img.parentNode){
+          img.parentNode.innerHTML = '<div class="vide"><b>Photo introuvable</b><span>'
+            + ech(img.getAttribute("src")) + '</span></div>';
+        }
+        return;
+      }
+      if(et.getAttribute("data-auto") === "1"){
+        var art = et.parentNode;
+        art.removeChild(et);
+        renumerote(art);
+      } else {
+        img.parentNode.innerHTML = '<div class="vide"><b>Photo introuvable</b><span>'
+          + ech(img.getAttribute("src")) + '</span></div>';
+      }
+    }
+  };
+
+  function renumerote(art){
+    if(!art) return;
+    Array.prototype.forEach.call(art.querySelectorAll(".etape"), function(et,i){
+      var pu = et.querySelector(".puce");
+      if(pu) pu.textContent = i+1;
+    });
+    if(!art.querySelector(".etape")){
+      var v = document.createElement("div");
+      v.className = "cadre";
+      v.innerHTML = '<div class="vide"><b>Aucune photo</b><span>dossier photos/</span></div>';
+      art.appendChild(v);
+    }
+  }
+
+  function dessineJauge(){
+    jauge.innerHTML="";
+    pts().forEach(function(_,i){
+      var s=document.createElement("span");
+      if(i<iP) s.className="faite";
+      if(i===iP) s.className="active";
+      jauge.appendChild(s);
+    });
+  }
+
+  function dessineSommaire(){
+    liste.innerHTML="";
+    pts().forEach(function(p,i){
+      var b=document.createElement("button");
+      b.className="item"; b.type="button";
+      var nb=(p.etapes||[]).filter(function(e){return e&&e.img;}).length;
+      var fin = p.statut==="absent" ? "Pointeau absent" : nb+' photo'+(nb>1?"s":"");
+      b.innerHTML='<b>'+ech(p.code)+'</b>'
+        + '<span>'+ech(p.nom||"Sans nom")+'</span>'
+        + '<i>'+fin+'</i>';
+      b.addEventListener("click",function(){
+        iP=i; som.classList.remove("ouvert"); rendu();
+      });
+      liste.appendChild(b);
+    });
+  }
+
+  function rendu(){
+    var l=pts();
+    if(!l.length){ scene.innerHTML='<article class="carte"><p>Aucun pointeau.</p></article>'; return; }
+
+    if(impression){
+      scene.innerHTML=l.map(function(p,i){ return carte(p,i+1,l.length); }).join("");
+        return;
+    }
+
+    scene.innerHTML=carte(l[iP],iP+1,l.length);
+    dessineJauge();
+    prec.disabled=(iP===0);
+    var dernier=(iP===l.length-1);
+    suiv.textContent=dernier?"Ronde terminee":"Suivant";
+    suiv.classList.toggle("fin",dernier);
+    suiv.disabled=dernier;
+    aide.textContent=(ronde().sousTitre||"")+(ronde().depart?" - depart : "+ronde().depart:"");
+    window.scrollTo(0,0);
+  }
+
+  function bouge(d){
+    var n=iP+d;
+    if(n<0||n>=pts().length) return;
+    iP=n; rendu();
+  }
+
+  prec.addEventListener("click",function(){ bouge(-1); });
+  suiv.addEventListener("click",function(){ bouge(1); });
+  choix.addEventListener("change",function(){ iR=Number(choix.value); iP=0; dessineSommaire(); rendu(); });
+
+  btnSom.addEventListener("click",function(){
+    dessineSommaire();
+    som.classList.toggle("ouvert");
+  });
+
+  document.addEventListener("keydown",function(e){
+    if(e.key==="Escape") som.classList.remove("ouvert");
+    if(som.classList.contains("ouvert")) return;
+    if(e.key==="ArrowRight") bouge(1);
+    if(e.key==="ArrowLeft")  bouge(-1);
+  });
+
+  var x0=null,y0=null;
+  document.addEventListener("touchstart",function(e){
+    x0=e.changedTouches[0].clientX; y0=e.changedTouches[0].clientY;
+  },{passive:true});
+  document.addEventListener("touchend",function(e){
+    if(x0===null||som.classList.contains("ouvert")) return;
+    var dx=e.changedTouches[0].clientX-x0, dy=e.changedTouches[0].clientY-y0;
+    if(Math.abs(dx)>60 && Math.abs(dx)>Math.abs(dy)*1.8) bouge(dx<0?1:-1);
+    x0=null; y0=null;
+  },{passive:true});
+
+  window.addEventListener("beforeprint",function(){ impression=true; rendu(); });
+  window.addEventListener("afterprint", function(){ impression=false; rendu(); });
+
+  dessineSommaire();
+  rendu();
+})();
+</script>
+
+</body>
+</html>
